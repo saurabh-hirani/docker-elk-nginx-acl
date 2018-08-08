@@ -59,7 +59,7 @@ to know more about what the above scripts do.
 5. Connect to the nginx container:
 
   ```
-  # docker exec -it $(docker ps -q --name=ngnix) bash
+  # docker exec -it $(docker ps -q --filter 'name=_nginx' ) bash
   # cd /etc/nginx/conf.d
   # vim kibana.conf
   ```
