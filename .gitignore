@@ -1,0 +1,7 @@
+*.json
+*.jsonl
+*.zip
+*.auth
+*.bkp
+data/elasticsearch
+.DS_Store
