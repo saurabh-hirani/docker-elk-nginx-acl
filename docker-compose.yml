@@ -1,0 +1,68 @@
+version: '2'
+
+services:
+
+  elasticsearch:
+    build:
+      context: elasticsearch/
+    volumes:
+      - ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml:ro
+      - ./data/elasticsearch/data/:/usr/share/elasticsearch/data
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    environment:
+      ES_JAVA_OPTS: "-Xmx512m -Xms512m"
+    networks:
+      - elk
+
+  logstash:
+    build:
+      context: logstash/
+    volumes:
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml:ro
+      - ./logstash/pipeline:/usr/share/logstash/pipeline:ro
+      - ./data/logstash/:/data
+    ports:
+      - "5000:5000"
+    environment:
+      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    depends_on:
+      - elasticsearch
+    networks:
+      - elk
+
+  kibana:
+    build:
+      context: kibana/
+    volumes:
+      - ./kibana/config/:/usr/share/kibana/config:ro
+      - ./data/kibana/:/data
+    depends_on:
+      - elasticsearch
+    ports:
+      - "5601:5601"
+    networks:
+      - elk
+
+  nginx:
+    build:
+      context: nginx/
+    volumes:
+      - ./nginx/config/:/etc/nginx/conf.d
+      - ./nginx/auth/kibana-read-only-users.auth:/etc/nginx/kibana-read-only-users.auth
+      - ./nginx/auth/kibana-normal-users.auth:/etc/nginx/kibana-normal-users.auth
+      - ./nginx/auth/kibana-admin-users.auth:/etc/nginx/kibana-admin-users.auth
+      - ./data/nginx/:/data
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+      - "8082:8082"
+    depends_on:
+      - kibana
+    networks:
+      - elk
+
+networks:
+  elk:
+    driver: bridge
