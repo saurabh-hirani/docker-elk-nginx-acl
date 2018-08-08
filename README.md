@@ -4,12 +4,7 @@ Dockerized [ELK](https://www.elastic.co/elk-stack) stack with [nginx](https://ww
 
 ### Why was it created?
 
-To try out nginx reverse proxy setup + implement nginx based ACL for Kibana UI read-only, normal and admin user.
-
-If you use [AWS Elasticsearch](https://aws.amazon.com/elasticsearch-service/) - its Kibana UI, as of this writing
-does not come with X-Pack plugins for Role based access control. This means that all users of the Kibana UI can
-do anything - create/delete indexes, dashboards, visualizations, etc. Keeping Nginx in front of your ES cluster and
-using the [config](nginx/config) specified in this repo helps you delegate ACL work to Nginx.
+[Post](http://saurabh-hirani.github.io/writing/2018/08/04/elk-nginx-acl) citing the reasons.
 
 ### How was it created?
 
